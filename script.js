@@ -1,3 +1,11 @@
+/**
+ * 
+ *   a simple game project based on JS 
+ *   since 2000 - Sprite Coder 
+ * 
+ * 
+ */
+
 window.addEventListener('load', function() {
     //setup canvas 
     const canvas = document.getElementById('canvas1');
@@ -14,6 +22,8 @@ window.addEventListener('load', function() {
                 ) && this.game.keys.indexOf(e.key) === -1) {
                     this.game.keys.push(e.key);
 
+                }else if (e.key === ' '){
+                    this.game.
                 }
                         console.log(this.game.keys);
             });
@@ -26,7 +36,28 @@ window.addEventListener('load', function() {
         }
     }
 
+    
+    
     class Projectile {
+
+        constructor(game, x, y){
+            this.game = game;
+            this.x = x;
+            this.y = y;
+            this.width = 10;
+            this.height = 3;
+            this.speed = 3;
+            this.markedForDeletion = false;
+        }
+        update(){
+            this.x += this.speed; 
+            if (this.x > this.game.width * 0.8) this.markedForDeletion = true; 
+        }
+        draw(context){
+            context.FillStyle = 'yellow';
+            fillRect(this.x, this.y, this.width, this.height);
+
+        }
 
     }
 
@@ -43,15 +74,35 @@ window.addEventListener('load', function() {
             this.x = 20;
             this.y = 100;
             this.speedY = 0;
+            this.maxSpeed = 3; 
+            this.projectiles = [];
         }
 
         update() {
-                this.y += this.speedY;
+            if (this.game.keys.includes('ArrowUp')) this.speedY = -this.maxSpeed;
+            else if(this.game.keys.includes('ArrowDown')) this.speedY = this.maxSpeed;
+            else this.speedY = 0;    
+            this.y += this.speedY;
+            //gestione proiettili
+            this.projectiles.forEach(projectile => {
+                    projectile.update();
+            });
         }
         draw(context) {
+                    context.FillStyle = 'black';
                     context.fillRect(this.x, this.y, this.width, this.height);
         }
+        shootTop(){
+            this.projectiles.push(new Projectile(this.game, this.x, this.y));
+        }
 
+    }
+
+    //abbiamo aggiunto un nuovo elemento al programma gioco
+    class Asteroids {
+        constructor(game){
+            this.game = game; 
+        }
     }
 
     class Enemy {
